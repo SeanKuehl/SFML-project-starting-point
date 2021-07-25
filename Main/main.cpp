@@ -5,6 +5,23 @@
 
 
 int main(void) {
+
+
+	//to move the camera around the world/map I'll need to use
+	//sf:view, this is kind of like the godot camera
+	//this api resource is actually great, views can be used for a lot
+	//https://www.sfml-dev.org/tutorials/2.5/graphics-view.php
+
+
+	//now I just need the custom draw stuff from autocrat
+	/*
+	void Draw(sf::RenderWindow* passedWindow) {
+		thisText.setFont(textFont);
+		passedWindow->draw(thisText);
+	}
+	now make a small project using all of them, maybe maybe not
+	*/
+
 	sf::RenderWindow window(sf::VideoMode(1000, 800), "SFML works!");
 	sf::CircleShape ball(10.f);
 	ball.setFillColor(sf::Color::White);

@@ -151,10 +151,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BasicText.cpp" />
+    <ClCompile Include="ButtonWithText.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="ipaexm.ttf" />
+    <Font Include="sans.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BasicText.h" />
+    <ClInclude Include="ButtonWithText.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
