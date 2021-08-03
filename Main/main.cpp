@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <SFML/Graphics.hpp>
+#include "Point.h"
 
 
 
@@ -23,12 +24,22 @@ int main(void) {
 	*/
 
 	sf::RenderWindow window(sf::VideoMode(1000, 800), "SFML works!");
-	sf::CircleShape ball(10.f);
-	ball.setFillColor(sf::Color::White);
-	ball.setPosition(500, 400);
 	
-	float ballXSpeed = 0.05;
-	float ballYSpeed = 0.05;
+	//y axis
+	sf::RectangleShape line(sf::Vector2f(500, 5));
+	line.setPosition(sf::Vector2f(200, 100));
+	line.rotate(90);
+
+	//x axis
+	sf::RectangleShape xAxis(sf::Vector2f(550, 5));
+	xAxis.setPosition(sf::Vector2f(195, 600));
+
+	//test point trying to hit 0
+	sf::RectangleShape redThing(sf::Vector2f(5, 5));
+	redThing.setPosition(sf::Vector2f(195, 600));	//195, 600 is the new 0,0
+	redThing.setFillColor(sf::Color(255, 0, 0));
+
+
 	int playerOneScore = 0;	//this is the player on the left
 	int playerTwoScore = 0;	//this is the player on the right
 
@@ -44,22 +55,37 @@ int main(void) {
 	playerOneText.setFont(font);
 	playerOneText.setCharacterSize(24);
 	playerOneText.setFillColor(sf::Color::White);
-	playerOneText.setPosition(sf::Vector2f(400, 10));
-
-	playerTwoText.setFont(font);
+	playerOneText.setRotation(-90.0);
+	playerOneText.setPosition(sf::Vector2f(50, 150));
+	
+	/*playerTwoText.setFont(font);
 	playerTwoText.setCharacterSize(24);
 	playerTwoText.setFillColor(sf::Color::White);
-	playerTwoText.setPosition(sf::Vector2f(600, 10));
+	playerTwoText.setPosition(sf::Vector2f(600, 10));*/
 
-	sf::RectangleShape rightPaddle(sf::Vector2f(950, 10));	//this might be size, it seems useless
-	rightPaddle.setSize(sf::Vector2f(20, 100));
-	rightPaddle.setFillColor(sf::Color::White);
-	rightPaddle.setPosition(sf::Vector2f(950, 10));
 
-	sf::RectangleShape leftPaddle(sf::Vector2f(50,10));
-	leftPaddle.setSize(sf::Vector2f(20, 100));
-	leftPaddle.setFillColor(sf::Color::White);
-	leftPaddle.setPosition(sf::Vector2f(50, 10));
+	
+	float moneyValue = 150.25f;
+	int hypotheticalDayOfMonth = 15 * 10;	//it's *50 to space out the days of the month
+
+	Point testPoint = Point(moneyValue, sf::Vector2f(195+hypotheticalDayOfMonth, 600 - int(moneyValue)));	//195, 600 is the new 0,0 and int()ing a float value cuts off the decimal, the +50 is just to horizontally seperate the space between days of the month, the -1 is because the lower the y the higher, so I need to make the value negative to be accurate
+
+	sf::Text dayText;
+	dayText.setFont(font);
+	dayText.setCharacterSize(15);
+	dayText.setFillColor(sf::Color::White);
+	//dayText.setRotation(-90.0);
+	dayText.setString("15th");
+	dayText.setPosition(sf::Vector2f(195+hypotheticalDayOfMonth, 625));
+
+	sf::Text moneyText;
+	moneyText.setFont(font);
+	moneyText.setCharacterSize(15);
+	moneyText.setFillColor(sf::Color::White);
+	//dayText.setRotation(-90.0);
+	moneyText.setString("150");
+	moneyText.setPosition(sf::Vector2f(160, 600 - int(moneyValue)));
+
 	//use move() which will shift it so much from it's current position
 	//use primitives for the pong paddles
 	//leftPaddle.getGlobalBounds();	//this gets a rect
@@ -73,83 +99,29 @@ int main(void) {
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-				leftPaddle.move(sf::Vector2f(0, -10));
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-				leftPaddle.move(sf::Vector2f(0, 10));
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-				rightPaddle.move(sf::Vector2f(0,10));
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-				rightPaddle.move(sf::Vector2f(0, -10));
-			}
-		}
-
-		//check for variouse things
-		if (leftPaddle.getGlobalBounds().top < 0) {
-			leftPaddle.setPosition(sf::Vector2f(50, 10));
-		}
-		if ((leftPaddle.getGlobalBounds().top + leftPaddle.getGlobalBounds().height) > 790) {
-			leftPaddle.setPosition(sf::Vector2f(50, 680));
-		}
-		if (rightPaddle.getGlobalBounds().top < 0) {
-			rightPaddle.setPosition(sf::Vector2f(950, 10));
-		}
-		if ((rightPaddle.getGlobalBounds().top + rightPaddle.getGlobalBounds().height) > 790) {
-			rightPaddle.setPosition(sf::Vector2f(950, 680));
-		}
-
-		ball.move(sf::Vector2f(ballXSpeed, ballYSpeed));
-
-		//when the ball goes out of screen in the different directions
-		if (ball.getGlobalBounds().top < 0) {
-			ballYSpeed = ballYSpeed * -1;
-		}
-		if ((ball.getGlobalBounds().top + ball.getGlobalBounds().height) > 790) {
-			ballYSpeed = ballYSpeed * -1;
-		}
-		if (ball.getGlobalBounds().left < 0) {
-			//it went out the left side
-			playerTwoScore += 1;
 			
-			ball.setPosition(500, 400);
-			ballXSpeed = ballXSpeed * -1;
-			ballYSpeed = ballYSpeed * -1;
-		}
-		if ((ball.getGlobalBounds().left + ball.getGlobalBounds().width) > 1000) {
-			playerOneScore += 1;
-			ball.setPosition(500, 400);
-			ballXSpeed = ballXSpeed * -1;
-			ballYSpeed = ballYSpeed * -1;
 		}
 
-		//when ball collides
-		if (ball.getGlobalBounds().intersects(leftPaddle.getGlobalBounds())) {
-			
-			ballXSpeed = ballXSpeed * -1;
-		}
-		if (ball.getGlobalBounds().intersects(rightPaddle.getGlobalBounds())) {
-			
-			ballXSpeed = ballXSpeed * -1;
-		}
+		
 
 		str = std::to_string(playerOneScore);
 		playerOneText.setString(str);
 		str = std::to_string(playerTwoScore);
 		playerTwoText.setString(str);
 
-		
+		//for higher prices, make the zero value 1000 and subtract 1000 or whatever from the values so plotting is normal
+		//If I kept track of where the data points ended up being drawn, I could draw lines between them
 		
 
 		window.clear();
-		window.draw(leftPaddle);
-		window.draw(rightPaddle);
-		window.draw(ball);
-		window.draw(playerOneText);
+		window.draw(line);
+		//window.draw(playerOneText);
 		window.draw(playerTwoText);
-
+		testPoint.Draw(&window);
+		window.draw(xAxis);
+		window.draw(redThing);
+		window.draw(dayText);
+		window.draw(moneyText);
 		window.display();
 		
 	}
